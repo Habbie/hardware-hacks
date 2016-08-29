@@ -19,5 +19,4 @@ Files:
 * nunchuck.c - hacked up version from blogpost above
 * guitar.c - guitar client for linux (tested on raspbian)
 * guitar-stdin.c - parse 6 byte guitar messages from stdin
-* guitar-stdin-xterm.c - as above but color the whole screen based on the input (this is how I did this small demo https://youtu.be/wZGP3cPInG0)
-
+* guitar-stdin-xterm.c - as above but color the whole screen based on the input
