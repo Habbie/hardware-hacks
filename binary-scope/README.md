@@ -94,3 +94,7 @@ So that looks like a rough 1 MHz. However, when evaluating the output with `toed
 
 ## further ideas
 * for one of the feasible sniffing methods, add support to https://sigrok.org/wiki/Supported_hardware so I don't have to write my own I2C decoder
+
+## links of interest
+* https://github.com/ankitaggarwal011/PiScope
+* http://abyz.co.uk/rpi/pigpio/ - 'hardware timed sampling and time-stamping of GPIO 0-31 every 5 µs', can output as VCD (which sigrok can read)
