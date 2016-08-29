@@ -31,7 +31,7 @@ $ hexdump -C /dev/spidev0.0
 ...
 ```
 
-The edges are easy to spot here as well - notice `03 ff 00` on the fourth line for example, 11 sampled high bits, reflecting the shortest 'high' period in this transaction, which is where I got the 486/11 = 45 kHz measurement for this pair of devices. (Sampling at twice the rate, near 1mHz, indeed stretches these runs to 20-23 bits).
+The edges are easy to spot here as well - notice `03 ff 00` on the fourth line for example, 11 sampled high bits, reflecting the shortest 'high' period in this transaction, which is where I got the 486/11 = 45 kHz measurement for this pair of devices. (Sampling at twice the rate, near 1MHz, indeed stretches these runs to 20-23 bits).
 
 I ran `dd if=/dev/spidev0.0 bs=4096 of=sda-1transaction-1` and did one transaction on the SDA line of the I2C bus I'm sniffing (between ESP8266 and the guitar). I made 3 of these files. The edge count is consistent, suggesting that nothing is getting missed or dropped.
 ```
@@ -86,7 +86,7 @@ $ ./pollingtest | pv > /dev/null
 1.79MiB 0:00:15 [ 125KiB/s]
 ```
 
-So that looks like a rough MHz. However, when evaluating the output with `toedges.py` I am missing between 50% and 75% of edges. I have not investigated why this is.
+So that looks like a rough 1 MHz. However, when evaluating the output with `toedges.py` I am missing between 50% and 75% of edges. I have not investigated why this is.
 
 ## other options
 * mmap SPI via `/dev/mem` ([apparently this can be done](http://raspberrypi.stackexchange.com/a/2044)) - I'm not sure how useful this is for me compared to my `spidev_test.c` or reading from `/dev/spidev*` (which can also be set to a higher frequency)
