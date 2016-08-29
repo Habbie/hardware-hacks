@@ -9,6 +9,8 @@ If you're going to imitate this, I recommend keeping http://wiibrew.org/wiki/Wii
 
 Edit IPs in init.lua and pins in guitar.lua, then ship *.lua to an ESP8266 (I tested with NodeMCU and Wemos D1) using luatool. Make sure your firmware has I2C. My pins (1 and 2) are actually labeled D1 and D2 on the NodeMCU and the Wemos.
 
+Some images of the physical setup in [this imgur album](http://imgur.com/a/AoNG4).
+
 ## Lamp-side deployment
 
 I don't actually own led strips or mood lights or whatever. I run `nc -u -l 0 2000 | ~/guitar-stdin-xterm` on the IP configured in init.lua and let it colour my screen (https://youtu.be/wZGP3cPInG0).
