@@ -16,9 +16,11 @@ Some images of the physical setup in [this imgur album](http://imgur.com/a/AoNG4
 I don't actually own led strips or mood lights or whatever. I run `nc -u -l 0 2000 | ~/guitar-stdin-xterm` on the IP configured in init.lua and let it colour my screen (https://youtu.be/wZGP3cPInG0).
 
 Files:
+
 * guitar.lua - mildly inspired by https://github.com/samularity/nodemcu_lua/blob/master/nunchuk.lua but adapted to use the non-encrypted protocol based on the whatacowpi blogpost
 * init.lua - bootup script, taken from luatool + 4 new lines
 * nunchuck.c - hacked up version from blogpost above
 * guitar.c - guitar client for linux (tested on raspbian)
 * guitar-stdin.c - parse 6 byte guitar messages from stdin
 * guitar-stdin-xterm.c - as above but color the whole screen based on the input
+* guitar-ws281x.py - adapted from [`strandtest.py`](https://github.com/jgarff/rpi_ws281x/blob/master/python/examples/strandtest.py) to receive my UDP packets and drive a GRB LED strip
