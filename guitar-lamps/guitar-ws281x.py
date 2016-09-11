@@ -21,23 +21,26 @@ LED_INVERT     = False   # True to invert the signal (when using NPN transistor 
 BLACK = (0,0,0)
 
 BIT_GREEN=1<<4
-GREEN = (0, 255, 0)
+GREEN = (0, 1.0, 0)
 
 BIT_RED=1<<6
-RED = (255, 0, 0)
+RED = (1.0, 0, 0)
 
 BIT_YELLOW=1<<3
-YELLOW = (255,255,0)
+YELLOW = (1.0,1.0,0)
 
 BIT_BLUE=1<<5
-BLUE = (0, 0, 255)
+BLUE = (0, 0, 1.0)
 
 BIT_ORANGE=1<<7
-ORANGE = (255, 69, 0)
+ORANGE = (1.0, 0.27, 0)
 
 BIT_UP=1<<0
 
 BIT_DOWN=1<<6
+
+def oneto255(color):
+	return (int(i*255) for i in color)
 
 def RGBtoGRB(color):
 	return (color[1], color[0], color[2])
@@ -149,7 +152,7 @@ if __name__ == '__main__':
 		print color, on
 
 		if(color and on):
-			colorSet(strip, Color(*(RGBtoGRB(color))))
+			colorSet(strip, Color(*(oneto255(RGBtoGRB(color)))))
 		if not on:
 			colorSet(strip, Color(0, 0, 0))
 
