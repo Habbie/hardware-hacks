@@ -35,6 +35,9 @@ BLUE = (0, 0, 255)
 BIT_ORANGE=1<<7
 ORANGE = (255, 69, 0)
 
+BIT_UP=1<<0
+
+BIT_DOWN=1<<6
 
 def RGBtoGRB(color):
 	return (color[1], color[0], color[2])
@@ -116,24 +119,39 @@ if __name__ == '__main__':
 	sock.bind(('', 2000))
 
 
+	on = True
+	color=None
+
 	while True:
-		color=None
 		data = sock.recv(6)
 		print data.encode('hex')
 
-		colormap = ord(data[5])
-		if not colormap & BIT_GREEN:
+		b4 = ord(data[4])
+		b5 = ord(data[5])
+
+		if not b5 & BIT_GREEN:
 			color = GREEN
-		elif not colormap & BIT_RED:
+		elif not b5 & BIT_RED:
 			color = RED
-		elif not colormap & BIT_YELLOW:
+		elif not b5 & BIT_YELLOW:
 			color = YELLOW
-		elif not colormap & BIT_BLUE:
+		elif not b5 & BIT_BLUE:
 			color = BLUE
-		elif not colormap & BIT_ORANGE:
+		elif not b5 & BIT_ORANGE:
 			color = ORANGE
 
-		if(color): colorSet(strip, Color(*(RGBtoGRB(color))))
+		if not b4 & BIT_DOWN:
+			on = False
+
+		if not b5 & BIT_UP:
+			on = True
+
+		print color, on
+
+		if(color and on):
+			colorSet(strip, Color(*(RGBtoGRB(color))))
+		if not on:
+			colorSet(strip, Color(0, 0, 0))
 
 #		# Color wipe animations.
 #		colorWipe(strip, Color(255, 0, 0))  # Red wipe
