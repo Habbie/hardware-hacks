@@ -126,6 +126,8 @@ if __name__ == '__main__':
 	color=None
 
 	while True:
+		newcolor = None
+
 		data = sock.recv(6)
 		print data.encode('hex')
 
@@ -133,15 +135,19 @@ if __name__ == '__main__':
 		b5 = ord(data[5])
 
 		if not b5 & BIT_GREEN:
-			color = GREEN
+			newcolor = GREEN
 		elif not b5 & BIT_RED:
-			color = RED
+			newcolor = RED
 		elif not b5 & BIT_YELLOW:
-			color = YELLOW
+			newcolor = YELLOW
 		elif not b5 & BIT_BLUE:
-			color = BLUE
+			newcolor = BLUE
 		elif not b5 & BIT_ORANGE:
-			color = ORANGE
+			newcolor = ORANGE
+
+		if newcolor:
+			color = newcolor
+			on = True
 
 		if not b4 & BIT_DOWN:
 			on = False
