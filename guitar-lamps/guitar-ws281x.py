@@ -5,6 +5,7 @@
 # various animations on a strip of NeoPixels.
 import time
 import socket
+import threading
 
 from neopixel import *
 
@@ -109,14 +110,29 @@ def theaterChaseRainbow(strip, wait_ms=50):
 			for i in range(0, strip.numPixels(), 3):
 				strip.setPixelColor(i+q, 0)
 
+class LEDThread(threading.Thread):
+	def run(self):
+		# Create NeoPixel object with appropriate configuration.
+		self.strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS)
+		# Intialize the library (must be called once before other functions).
+		self.strip.begin()
+		self.color=(1.0,1.0,1.0)
+		self.targetcolor=(1.0,1.0,1.0)
+		self.on=False
+
+		while True:
+			time.sleep(1/100.0)
+
+			if(self.color and self.on):
+				print ".",
+				colorSet(self.strip, Color(*(oneto255(RGBtoGRB(self.color)))))
+			if not self.on:
+				colorSet(self.strip, Color(0, 0, 0))
 
 # Main program logic follows:
 if __name__ == '__main__':
-	# Create NeoPixel object with appropriate configuration.
-	strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS)
-	# Intialize the library (must be called once before other functions).
-	strip.begin()
-
+	ledthread = LEDThread()
+	ledthread.start()
 	print ('Press Ctrl-C to quit.')
 	sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 	sock.bind(('', 2000))
@@ -146,21 +162,17 @@ if __name__ == '__main__':
 			newcolor = ORANGE
 
 		if newcolor:
-			color = newcolor
-			on = True
+			ledthread.color = newcolor
+			ledthread.on = True
 
 		if not b4 & BIT_DOWN:
-			on = False
+			ledthread.on = False
 
 		if not b5 & BIT_UP:
-			on = True
+			ledthread.on = True
 
-		print color, on
+		print ledthread.color, ledthread.on
 
-		if(color and on):
-			colorSet(strip, Color(*(oneto255(RGBtoGRB(color)))))
-		if not on:
-			colorSet(strip, Color(0, 0, 0))
 
 #		# Color wipe animations.
 #		colorWipe(strip, Color(255, 0, 0))  # Red wipe
