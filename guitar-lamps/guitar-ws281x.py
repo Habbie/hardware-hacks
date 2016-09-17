@@ -152,7 +152,7 @@ if __name__ == '__main__':
 	color=None
 
 	while True:
-		newcolor = None
+		newcolors = []
 
 		data = sock.recv(6)
 		print data.encode('hex')
@@ -161,15 +161,24 @@ if __name__ == '__main__':
 		b5 = ord(data[5])
 
 		if not b5 & BIT_GREEN:
-			newcolor = GREEN
-		elif not b5 & BIT_RED:
-			newcolor = RED
-		elif not b5 & BIT_YELLOW:
-			newcolor = YELLOW
-		elif not b5 & BIT_BLUE:
-			newcolor = BLUE
-		elif not b5 & BIT_ORANGE:
-			newcolor = ORANGE
+			newcolors.append(GREEN)
+		if not b5 & BIT_RED:
+			newcolors.append(RED)
+		if not b5 & BIT_YELLOW:
+			newcolors.append(YELLOW)
+		if not b5 & BIT_BLUE:
+			newcolors.append(BLUE)
+		if not b5 & BIT_ORANGE:
+			newcolors.append(ORANGE)
+
+		if newcolors:
+			newcolor = (
+				sum(x[0] for x in newcolors) / len(newcolors),
+				sum(x[1] for x in newcolors) / len(newcolors),
+				sum(x[2] for x in newcolors) / len(newcolors)
+			)
+
+		print 'new color', newcolor
 
 		if newcolor:
 			ledthread.color = newcolor
