@@ -110,6 +110,10 @@ def theaterChaseRainbow(strip, wait_ms=50):
 			for i in range(0, strip.numPixels(), 3):
 				strip.setPixelColor(i+q, 0)
 
+
+def moveneedle(fro, to):
+	return fro + (to-fro)/100
+
 class LEDThread(threading.Thread):
 	def run(self):
 		# Create NeoPixel object with appropriate configuration.
@@ -117,15 +121,21 @@ class LEDThread(threading.Thread):
 		# Intialize the library (must be called once before other functions).
 		self.strip.begin()
 		self.color=(1.0,1.0,1.0)
-		self.targetcolor=(1.0,1.0,1.0)
+		self.currentcolor=(1.0,1.0,1.0)
 		self.on=False
 
 		while True:
 			time.sleep(1/100.0)
 
-			if(self.color and self.on):
-				print ".",
-				colorSet(self.strip, Color(*(oneto255(RGBtoGRB(self.color)))))
+			if self.color != self.currentcolor:
+				self.currentcolor = (
+					moveneedle(self.currentcolor[0], self.color[0]),
+					moveneedle(self.currentcolor[1], self.color[1]),
+					moveneedle(self.currentcolor[2], self.color[2])
+				)
+
+			if(self.currentcolor and self.on):
+				colorSet(self.strip, Color(*(oneto255(RGBtoGRB(self.currentcolor)))))
 			if not self.on:
 				colorSet(self.strip, Color(0, 0, 0))
 
