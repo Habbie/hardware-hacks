@@ -153,6 +153,7 @@ if __name__ == '__main__':
 
 	while True:
 		newcolors = []
+		newcolor = None
 
 		data = sock.recv(6)
 		print data.encode('hex')
