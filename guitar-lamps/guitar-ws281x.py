@@ -110,33 +110,52 @@ def theaterChaseRainbow(strip, wait_ms=50):
 				strip.setPixelColor(i+q, 0)
 
 
-def moveneedle(fro, to):
-	return fro + (to-fro)/100
+def cap(f):
+	if f < 0.0: return 0.0
+	if f > 1.0: return 1.0
+	return f
 
 class LEDThread(threading.Thread):
+	def makedelta(self, to):
+		self.deltasteps = 100
+		self.delta = (
+			(to[0]-self.currentcolor[0])/100,
+			(to[1]-self.currentcolor[1])/100,
+			(to[2]-self.currentcolor[2])/100
+		)
+		print "new delta", self.delta, self.deltasteps
+
+	def applydelta(self):
+		if self.deltasteps:
+			self.currentcolor = (
+				cap(self.currentcolor[0] + self.delta[0]),
+				cap(self.currentcolor[1] + self.delta[1]),
+				cap(self.currentcolor[2] + self.delta[2])
+			)
+			self.deltasteps = self.deltasteps - 1
+
+	def fadeTo(self, color):
+		self.makedelta(color)
+
+	def hold(self):
+		self.deltasteps = 0
+
 	def run(self):
 		# Create NeoPixel object with appropriate configuration.
 		self.strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS)
 		# Intialize the library (must be called once before other functions).
 		self.strip.begin()
-		self.color=(1.0,1.0,1.0)
 		self.currentcolor=(1.0,1.0,1.0)
-		self.on=False
+		self.delta=(0.0, 0.0, 0.0)
+		self.deltasteps=0
 
 		while True:
 			time.sleep(1/100.0)
 
-			if self.color != self.currentcolor:
-				self.currentcolor = (
-					moveneedle(self.currentcolor[0], self.color[0]),
-					moveneedle(self.currentcolor[1], self.color[1]),
-					moveneedle(self.currentcolor[2], self.color[2])
-				)
+			self.applydelta()
 
-			if(self.currentcolor and self.on):
-				colorSet(self.strip, Color(*(oneto255(RGBtoGRB(self.currentcolor)))))
-			if not self.on:
-				colorSet(self.strip, Color(0, 0, 0))
+			# print self.currentcolor
+			colorSet(self.strip, Color(*(oneto255(RGBtoGRB(self.currentcolor)))))
 
 # Main program logic follows:
 if __name__ == '__main__':
@@ -148,7 +167,6 @@ if __name__ == '__main__':
 
 
 	on = True
-	color=None
 
 	while True:
 		newcolors = []
@@ -170,6 +188,10 @@ if __name__ == '__main__':
 			newcolors.append(BLUE)
 		if not b5 & BIT_ORANGE:
 			newcolors.append(ORANGE)
+		if not b4 & BIT_DOWN:
+			newcolors.append(BLACK)
+		if not b5 & BIT_UP:
+			newcolors.append(WHITE)
 
 		if newcolors:
 			newcolor = (
@@ -181,17 +203,11 @@ if __name__ == '__main__':
 		print 'new color', newcolor
 
 		if newcolor:
-			ledthread.color = newcolor
-			ledthread.on = True
+			ledthread.fadeTo(newcolor)
+		else:
+			ledthread.hold()
 
-		if not b4 & BIT_DOWN:
-			ledthread.on = False
-
-		if not b5 & BIT_UP:
-			ledthread.on = True
-
-		print ledthread.color, ledthread.on
-
+		# print ledthread.color
 
 #		# Color wipe animations.
 #		colorWipe(strip, Color(255, 0, 0))  # Red wipe
