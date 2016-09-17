@@ -18,9 +18,6 @@ LED_DMA        = 5       # DMA channel to use for generating signal (try 5)
 LED_BRIGHTNESS = 255     # Set to 0 for darkest and 255 for brightest
 LED_INVERT     = False   # True to invert the signal (when using NPN transistor level shift)
 
-
-BLACK = (0,0,0)
-
 BIT_GREEN=1<<4
 GREEN = (0, 1.0, 0)
 
@@ -37,8 +34,10 @@ BIT_ORANGE=1<<7
 ORANGE = (1.0, 0.27, 0)
 
 BIT_UP=1<<0
+WHITE = (1.0, 1.0, 1.0)
 
 BIT_DOWN=1<<6
+BLACK = (0,0,0)
 
 def oneto255(color):
 	return (int(i*255) for i in color)
