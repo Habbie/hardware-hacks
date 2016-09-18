@@ -39,6 +39,9 @@ WHITE = (1.0, 1.0, 1.0)
 BIT_DOWN=1<<6
 BLACK = (0,0,0)
 
+BIT_PLUS=1<<2
+BIT_MINUS=1<<4
+
 def oneto255(color):
 	return (int(i*255) for i in color)
 
@@ -137,6 +140,15 @@ class LEDThread(threading.Thread):
 	def fadeTo(self, color):
 		self.makedelta(color)
 
+	def fadeToMax(self):
+		max = max(self.currentcolor)
+		maxcolor = (
+			self.currentcolor[0] / max,
+			self.currentcolor[1] / max,
+			self.currentcolor[2] / max
+		)
+		self.makedelta(maxcolor)
+
 	def hold(self):
 		self.deltasteps = 0
 
@@ -165,8 +177,9 @@ if __name__ == '__main__':
 	sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 	sock.bind(('', 2000))
 
-
 	on = True
+
+	maxmixing = True
 
 	while True:
 		newcolors = []
@@ -193,14 +206,27 @@ if __name__ == '__main__':
 		if not b5 & BIT_UP:
 			newcolors.append(WHITE)
 
-		if newcolors:
-			newcolor = (
-				max(x[0] for x in newcolors),
-				max(x[1] for x in newcolors),
-				max(x[2] for x in newcolors)
-			)
+		if not b4 & BIT_PLUS:
+			maxmixing = True
 
-		print 'new color', newcolor
+		if not b4 & BIT_MINUS:
+			maxmixing = False
+
+		if newcolors:
+			if maxmixing:
+				newcolor = (
+					max(x[0] for x in newcolors),
+					max(x[1] for x in newcolors),
+					max(x[2] for x in newcolors)
+				)
+			else:
+				newcolor = (
+					sum(x[0] for x in newcolors) / len(newcolors),
+					sum(x[1] for x in newcolors) / len(newcolors),
+					sum(x[2] for x in newcolors) / len(newcolors)
+				)
+
+		print 'new color', newcolor, 'maxmixing', maxmixing
 
 		if newcolor:
 			ledthread.fadeTo(newcolor)
