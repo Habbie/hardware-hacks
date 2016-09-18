@@ -195,9 +195,9 @@ if __name__ == '__main__':
 
 		if newcolors:
 			newcolor = (
-				sum(x[0] for x in newcolors) / len(newcolors),
-				sum(x[1] for x in newcolors) / len(newcolors),
-				sum(x[2] for x in newcolors) / len(newcolors)
+				max(x[0] for x in newcolors),
+				max(x[1] for x in newcolors),
+				max(x[2] for x in newcolors)
 			)
 
 		print 'new color', newcolor
