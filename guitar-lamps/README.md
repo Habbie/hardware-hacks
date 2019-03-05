@@ -5,7 +5,7 @@ Some credit to http://whatacowpi.blogspot.com/2012/07/connecting-wii-nunchuck-to
 
 If you're going to imitate this, I recommend keeping http://wiibrew.org/wiki/Wiimote/Extension_Controllers handy - I only found it after figuring out a lot of things by hand.
 
-Two videos of stages of this process in action: https://youtu.be/wZGP3cPInG0, https://youtu.be/wZGP3cPInG0
+Two videos of stages of this process in action: https://youtu.be/wZGP3cPInG0, https://youtu.be/y0Lxqn27McA
 
 ## Guitar-side deployment
 
