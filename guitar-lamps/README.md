@@ -5,6 +5,8 @@ Some credit to http://whatacowpi.blogspot.com/2012/07/connecting-wii-nunchuck-to
 
 If you're going to imitate this, I recommend keeping http://wiibrew.org/wiki/Wiimote/Extension_Controllers handy - I only found it after figuring out a lot of things by hand.
 
+Two videos of stages of this process in action: https://youtu.be/wZGP3cPInG0, https://youtu.be/wZGP3cPInG0
+
 ## Guitar-side deployment
 
 Edit IPs in init.lua and pins in guitar.lua, then ship *.lua to an ESP8266 (I tested with NodeMCU and Wemos D1) using luatool. Make sure your firmware has I2C. My pins (1 and 2) are actually labeled D1 and D2 on the NodeMCU and the Wemos.
